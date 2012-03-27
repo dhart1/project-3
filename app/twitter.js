@@ -30,18 +30,5 @@ t.stream(
 			if(tweet.text.match(/awesome/)) {
 				client.incr('awesome');
 			};
-			if(tweet.text.match(/cool/)) {
-				client.incr('cool');
-			};
-			if(tweet.text.match(/rad/)) {
-				client.incr('rad');
-			};
-			if(tweet.text.match(/gnarly/)) {
-				client.incr('gnarly');
-			};
-			if(tweet.text.match(/groovy/)) {
-				client.incr('groovy');
-			};
-        });
-    }
-);
+     	});
+ 	});
