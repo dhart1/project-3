@@ -2,7 +2,8 @@ var twitter = require('ntwitter');
 var redis = require('redis');
 var credentials = require('./credentials.js');
 
-var client = redis.createClient();
+function TwitterWorker(terms) {
+	var client = redis.createClient();
 
 /*client.exists('awesome', function(error, exists) {
 	if (error) {
@@ -20,15 +21,39 @@ var t = new twitter({
     access_token_secret: credentials.access_token_secret
 });
 
-t.stream(
+var update = function(key) {
+client.incr(key, function(err, result) {
+	if(err) {
+		console.log('ERROR: ' + err);
+	} else {
+	var message = {key:key, count:result};
+		client.publish('update', JSON.stringify(message));
+		}
+	});
+};
+
+/*t.stream(
     'statuses/filter',
-    { track: ['awesome', 'cool', 'rad', 'gnarly', 'groovy'] },
+    { track: ['awesome'] },
     function(stream) {
         stream.on('data', function(tweet) {
-            console.log(tweet.text);
-
 			if(tweet.text.match(/awesome/)) {
 				client.incr('awesome');
 			};
      	});
- 	});
+ 	});*/
+ t.stream(
+	'statuses/filter',
+	{ track: terms },
+	function(stream) {
+		stream.on('data', function(tweet) {
+			console.log(tweet.text);
+			terms.forEach(function(term) {
+				if(tweet.text.match(new RegExp(term), 'i')) update(term);
+				});
+            });
+		}
+    );
+};
+	
+module.exports = TwitterWorker;

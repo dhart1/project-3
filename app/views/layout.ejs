@@ -1,10 +1,16 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Hello World</title>
+		<script src="socket.io/socket.io.js"></script>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	    <script>var socket = io.connect("localhost");
+	      socket.on("update", function(data) {
+	      $("#"+data.key).html(data.count);
+	      });
+	    </script>
+	<title>Here is a title</title>
 	</head>
-	<body>
-		<p>Hello World</p>
-		<%- body %>
-	</body>
-<html>
+		<body>
+		 <%- body %>
+		</body>
+</html>
