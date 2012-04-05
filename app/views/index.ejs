@@ -2,5 +2,5 @@
 
 <p>Term Search to display links</p>
 <% terms.forEach(function(term) { %>
-   <p><b><%= term %></b>: <span id='<%= term %>'>0</span></p>
+   <p><b><a href="/<%= term %>"><%term%></b>: <span id='<%= term %>'>0</span></p>
 <% }); %>

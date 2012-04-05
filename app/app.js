@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 
+var ejs = require('ejs');
 var express = require('express')
   , routes = require('./routes');
 var redis = require('redis');
@@ -40,7 +41,11 @@ app.configure('production', function(){
 app.get('/', function(req, res) {
     res.render('index.ejs', { terms: terms });
 });
-
+app.get('/awesome', routes.awesome);
+app.get('/cool', routes.cool);
+app.get('/rad', routes.rad);
+app.get('/gnarly', routes.gnarly);
+app.get('/groovy', routes.groovy);
 
 //app.get('/', routes.index);
 //app.get('/word/awesome', awesome.index);

@@ -21,7 +21,7 @@ var t = new twitter({
     access_token_secret: credentials.access_token_secret
 });
 
-var update = function(key) {
+var update = function(terms) {
 client.incr(key, function(err, result) {
 	if(err) {
 		console.log('ERROR: ' + err);
@@ -47,13 +47,21 @@ client.incr(key, function(err, result) {
 
 	 t.stream(
 		'statuses/filter',
-		{ track: terms },
+		{ track: [terms] },
 		function(stream) {
 			stream.on('data', function(tweet) {
-				console.log(tweet.text);
-				terms.forEach(function(term) {
-					if(tweet.text.match(new RegExp(term), 'i')) update(term);
-					});
+				try{
+					if (tweet.entities.urls[0].expanded_url != " "){
+						url = tweet.entites.urls[0].expanded_url;
+					}
+					else if (tweet.entities.urls[0].url != " "){
+						url = tweet.entities.urls[0].url;
+						}
+						console.log(url);
+						client.zincrby(word, 1, url);
+					}
+					catch (error){
+					}
 	            });
 			}
 	    );
